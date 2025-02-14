@@ -2,6 +2,8 @@
 
 LiquidCrystal lcd( 8,  9,  4,  5,  6,  7);
 
+
+// Command telling us what to print (p is just default lol)
 char currentCommand = 'P';
 
 
@@ -22,11 +24,12 @@ void loop() {
 
   recvOneChar();
 
+  // Line 1
   lcd.setCursor(0,0);
   lcd.print("Hi Tova & Char!");
-  lcd.setCursor(0,1);
 
-  // lcd.print(" ");
+  // Line 2
+  lcd.setCursor(0,1);
 
   if (currentCommand == 'W') {
     lcd.print("Front Left        ");
@@ -51,6 +54,7 @@ void loop() {
   Serial.println(currentCommand);
 } 
 
+// Read from serial
 void recvOneChar() {
     if (Serial.available() > 0) {
         currentCommand = Serial.read();

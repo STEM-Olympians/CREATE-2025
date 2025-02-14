@@ -1,20 +1,16 @@
-// FIXME
 const int PIN_YES_BUTTON = 12;
 const int PIN_NO_BUTTON = 13;
 
-// FIXME
 const int PIN_JOYSTICK_X = A4;
 const int PIN_JOYSTICK_Y = A3;
 
 
-// FIXME
 const int PIN_YES_LED = 8;
 const int PIN_NO_LED = 9;
 
 
 // Hold duration for lights in milliseconds
 const long HOLD_DURATION = 1000;
-
 
 
 int latchedYesState = LOW;
@@ -81,16 +77,15 @@ void setup() {
 
     digitalWrite(PIN_YES_LED, latchedYesState);
     digitalWrite(PIN_NO_LED, latchedNoState);
-    
-
   }
 
   void handleJoystick(){
 
     const int DEADBAND_RANGE = 150;
 
+    // We have 8 directions, so each one should have margin of 22.5 above and below
+    // That way, each one occupies 45 degrees - 8 directions
     const double JOYSTICK_ANGLE_ERROR_MARGIN = 45 / 2;
-
 
     int joystickX = analogRead(PIN_JOYSTICK_X);
     int joystickY = analogRead(PIN_JOYSTICK_Y);

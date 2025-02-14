@@ -13,7 +13,7 @@ const int PIN_NO_LED = 9;
 
 
 // Hold duration for lights in milliseconds
-const long HOLD_DURATION = 3000;
+const long HOLD_DURATION = 1000;
 
 
 
@@ -22,7 +22,6 @@ long timeOfLastYes = 0;
 
 int latchedNoState = LOW;
 long timeOfLastNo = 0;
-
 
 
 void setup() {
@@ -43,7 +42,7 @@ void setup() {
     handleButtons();
     handleJoystick();
 
-    delay(1000); 
+    delay(50); 
   }
 
 
@@ -74,9 +73,9 @@ void setup() {
       latchedNoState = LOW;
     }
 
-    Serial.print("NoBtn: "); Serial.println(noButtonState);
-    Serial.print(" LatchedNo: "); Serial.println(latchedNoState);
-    Serial.print(" TimeOfLastNo: "); Serial.println(timeOfLastNo);
+    //Serial.print("NoBtn: "); //Serial.println(noButtonState);
+    //Serial.print(" LatchedNo: "); //Serial.println(latchedNoState);
+    //Serial.print(" TimeOfLastNo: "); //Serial.println(timeOfLastNo);
 
 
 
@@ -100,38 +99,42 @@ void setup() {
     joystickX -= 500;
     joystickY -= 500;
 
-    Serial.print("x: "); Serial.println(joystickX);
-    Serial.print("y: "); Serial.println(joystickY);
+    //Serial.print("x: "); //Serial.println(joystickX);
+    //Serial.print("y: "); //Serial.println(joystickY);
 
     // Deadbanding
     if (epsilonEquals(0, abs(joystickX), DEADBAND_RANGE) && 
         epsilonEquals(0, abs(joystickY), DEADBAND_RANGE)){
+        Serial.print('P');
       return;
     } 
 
     int angle = (int) (atan2(joystickY, joystickX) * 180 / PI);
-    Serial.print("Angle: "); Serial.println(angle);
+    //Serial.print("Angle: "); //Serial.println(angle);
 
-    Serial.print("Direction: ");
+    //Serial.print("Direction: ");
 
-    
+   
+    // Case statement for the potential angles
     if (epsilonAngleEquals(angle, 0, JOYSTICK_ANGLE_ERROR_MARGIN)){
-      Serial.print("Right");
-    } else if(epsilonAngleEquals(angle, 45, JOYSTICK_ANGLE_ERROR_MARGIN)){
-      Serial.print("Front Right");
+      Serial.print('R');
+    } else if (epsilonAngleEquals(angle, 45, JOYSTICK_ANGLE_ERROR_MARGIN)){
+      Serial.print('X');
     } else if (epsilonAngleEquals(angle, 90, JOYSTICK_ANGLE_ERROR_MARGIN)){
-      Serial.print("Forwards");
-    } else if(epsilonAngleEquals(angle, 135, JOYSTICK_ANGLE_ERROR_MARGIN)){
-      Serial.print("Front Left");
-    } else if(epsilonAngleEquals(angle, 180, JOYSTICK_ANGLE_ERROR_MARGIN)){
-      Serial.print("Left");
-    } else if(epsilonAngleEquals(angle, 225, JOYSTICK_ANGLE_ERROR_MARGIN)){
-      Serial.print("Back Left");
+      Serial.print('F');
+    } else if (epsilonAngleEquals(angle, 135, JOYSTICK_ANGLE_ERROR_MARGIN)){
+      Serial.print('W');
+    } else if (epsilonAngleEquals(angle, 180, JOYSTICK_ANGLE_ERROR_MARGIN)){
+      Serial.print('L');
+    } else if (epsilonAngleEquals(angle, 225, JOYSTICK_ANGLE_ERROR_MARGIN)){
+      Serial.print('Z');
     } else if (epsilonAngleEquals(angle, 270, JOYSTICK_ANGLE_ERROR_MARGIN)){
-      Serial.print("Backwards");
+      Serial.print('B');
     } else if (epsilonAngleEquals(angle, 315, JOYSTICK_ANGLE_ERROR_MARGIN)){
-      Serial.print("Back Right");
+      Serial.print('Y');
     }
+
+
   }
 
   bool epsilonEquals(double currentVal, double targetVal, double epsilon){
@@ -142,6 +145,11 @@ void setup() {
     return abs(relativeAngularDifference(currentDegrees, targetDegrees)) < epsilon;
   }
   
+
+
+  // Thanks Aviva for the angle code <3
+  // Iron Pants 5026!
+
    /**
    * Modulo on a negative number returns a negative number. This function always returns positive
    * numbers, even for negative angles, without rotation.
